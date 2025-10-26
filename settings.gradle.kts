@@ -22,3 +22,5 @@ dependencyResolutionManagement {
 rootProject.name = "AyudaFilosofica"
 include(":app")
 include(":shared")
+
+
