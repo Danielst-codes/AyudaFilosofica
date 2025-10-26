@@ -1,12 +1,12 @@
 
 package com.example.ayudafilosofica.feature.home.presentation
 
-fun HomeState.reduce(event: HomeEvent): HomeState =
-    when (event) {
+fun HomeState.reduce(event: HomeEvent): HomeState {
+    return when (event) {
         is HomeEvent.InputChanged ->
             copy(
                 inputText = event.text,
-                canSend = event.text.trim().isNotEmpty()
+                canSend = event.text.trim().isNotEmpty() && !isSending
             )
 
         is HomeEvent.UserMessagePrepared ->
@@ -17,16 +17,23 @@ fun HomeState.reduce(event: HomeEvent): HomeState =
                 isSending = true
             )
 
-        is HomeEvent.BotReplyArrived ->
+        is HomeEvent.BotReplyArrived ->{
+            val nextIsSending = false
             copy(
                 messages = messages + event.message,
-                isSending = false
+                isSending = false,
+                canSend = inputText.trim().isNotEmpty() && !nextIsSending
             )
+        }
 
-        is HomeEvent.BotReplyFailed ->
+        is HomeEvent.BotReplyFailed ->{
+            val nextIsSending = false
             copy(
-                isSending = false
+                isSending = false,
+                canSend = inputText.trim().isNotEmpty() && !nextIsSending
             )
+        }
 
         HomeEvent.SendClicked -> this
     }
+}

@@ -13,10 +13,10 @@ import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 
+
 class HomeViewModel : ViewModel() {
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow() //Esto es un flujo observable
-    val s = state.value
     //Esta en un canal separado, para que no se guarde en el state
     private val _effects = kotlinx.coroutines.flow.MutableSharedFlow<HomeEffect>(replay = 0, extraBufferCapacity = 1)
     val effects = _effects.asSharedFlow()
@@ -43,9 +43,9 @@ class HomeViewModel : ViewModel() {
             }
 
             is HomeEvent.SendClicked -> {
-                val raw = s.inputText
+                val raw = state.value.inputText
                 val text = raw.trim()
-                if (s.isSending) {
+                if (state.value.isSending) {
                     return
                 }
                 if (text.isEmpty()) {
@@ -65,6 +65,7 @@ class HomeViewModel : ViewModel() {
 
                 viewModelScope.launch {
                     sendToBot(text)
+
                 }
             }
 
@@ -103,8 +104,14 @@ class HomeViewModel : ViewModel() {
         )
     }
 
-    private suspend fun sendToBot(prompt: String) {
-        val botMsg = prepareBotMessage("soy el bot")
+    private suspend fun sendToBot(prompt: String){
+        try {
+            val replytext = "He recibido: $prompt"
+            val botMsg: Menssage = prepareBotMessage(replytext)
+            onEvent(HomeEvent.BotReplyArrived(botMsg))
+        }catch (t: Throwable){
+            onEvent(HomeEvent.BotReplyFailed("Error"))
+        }
     }
 
     private fun mapErrorToText(throwable: Throwable) {

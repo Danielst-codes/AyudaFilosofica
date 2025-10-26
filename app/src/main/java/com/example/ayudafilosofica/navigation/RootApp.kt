@@ -38,6 +38,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 
 
 import androidx.compose.runtime.*
+import com.example.ayudafilosofica.feature.home.presentation.HomeViewModel
 
 
 private val mapaTitulos = mapOf(
@@ -124,7 +125,7 @@ fun RootApp() {
             modifier = Modifier.padding(innerPading)
         ){
             composable(Destinations.Philosophies) { PhilosophiesScreen()}
-            composable(Destinations.Chat) {HomeScreen()}
+            composable(Destinations.Chat) {HomeScreen(homeViewModel = HomeViewModel())}
             composable (Destinations.Settings){SettingsScreen()}
         }
 
