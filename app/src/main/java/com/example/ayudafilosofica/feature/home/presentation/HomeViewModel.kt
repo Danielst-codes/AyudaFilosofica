@@ -4,6 +4,7 @@ package com.example.ayudafilosofica.feature.home.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ayudafilosofica.core.Menssage
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -12,9 +13,17 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import javax.inject.Inject
+import com.example.ayudafilosofica.domain.MessageTime
+import com.example.ayudafilosofica.domain.IdGenerator
+import com.example.ayudafilosofica.domain.GenerateBotReplySuspend
 
-
-class HomeViewModel : ViewModel() {
+@HiltViewModel
+class HomeViewModel @Inject constructor(
+    private val idGen : IdGenerator,
+    private val clock : MessageTime,
+    //private val bot: GenerateBotReplySuspend
+) : ViewModel(){
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow() //Esto es un flujo observable
     //Esta en un canal separado, para que no se guarde en el state
@@ -88,19 +97,19 @@ class HomeViewModel : ViewModel() {
 
     private fun prepareUserMessage(text: String): Menssage {
         return Menssage(
-            id = AutoId.nextId(),
+            id = idGen.nextId(),
             texto = text,
             deUsuario = true,
-            timestamp = TimeGenerator.currentTime()
+            timestamp = clock.currentTime()
         )
     }
 
     private fun prepareBotMessage(text: String): Menssage {
         return Menssage(
-            id = AutoId.nextId(),
+            id = idGen.nextId(),
             texto = text,
             deUsuario = false,
-            timestamp = TimeGenerator.currentTime()
+            timestamp = clock.currentTime()
         )
     }
 
@@ -126,31 +135,8 @@ class HomeViewModel : ViewModel() {
     }
 }
 
-internal interface IdGenerator {
-    fun nextId(): Long
-}
 
-//Con el object tenemos un solo generado, el que crea el id es el nextID
-internal object AutoId : IdGenerator {
-    private val counter = java.util.concurrent.atomic.AtomicLong(System.currentTimeMillis())
-    override fun nextId(): Long = counter.incrementAndGet()
-}
 
-interface MessageTime {
-    fun currentTime(): String
-}
 
-internal object TimeGenerator : MessageTime {
-    override fun currentTime(): String {
-        val now = LocalTime.now()
-        val formatter = DateTimeFormatter.ofPattern("HH:mm")
-        val formattedTime = now.format(formatter)
-        return formattedTime
-    }
-}
-
-internal interface GenerateBotReplySuspend {
-    suspend fun generateBotReply(prompt: String): Result<Menssage>
-}
 
 interface HistoryRepository

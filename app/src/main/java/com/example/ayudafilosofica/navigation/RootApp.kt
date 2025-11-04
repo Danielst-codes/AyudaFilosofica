@@ -27,7 +27,7 @@ import androidx.navigation.compose.rememberNavController
 
 
 import com.example.ayudafilosofica.feature.settings.ui.SettingsScreen
-import com.example.ayudafilosofica.feature.auth.ui.PhilosophiesScreen
+import com.example.ayudafilosofica.feature.auth.ui.components.PhilosophiesScreen
 import com.example.ayudafilosofica.feature.home.ui.HomeScreen
 
 
@@ -38,6 +38,9 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 
 
 import androidx.compose.runtime.*
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.ayudafilosofica.domain.PhilosophyRepository
+import com.example.ayudafilosofica.feature.auth.presentation.PhilosophyViewModel
 import com.example.ayudafilosofica.feature.home.presentation.HomeViewModel
 
 
@@ -96,25 +99,25 @@ fun RootApp() {
 
                         }
                     }
-                        DropdownMenu(
-                            expanded = menuAbierto,
-                            onDismissRequest = { menuAbierto = false}){
+                    DropdownMenu(
+                        expanded = menuAbierto,
+                        onDismissRequest = { menuAbierto = false}){
 
-                            DropdownMenuItem(
-                                text = {Text("chat")},
-                                onClick = {
-                                    navTo(Destinations.Chat)
-                                })
-                            DropdownMenuItem(
-                                text = {Text("Ajustes")},
-                                onClick = {
-                                    navTo(Destinations.Settings)
-                                })
-                            DropdownMenuItem(
-                                text = {Text("Filosofias")},
-                                onClick = {
-                                    navTo(Destinations.Philosophies)
-                                })
+                        DropdownMenuItem(
+                            text = {Text("chat")},
+                            onClick = {
+                                navTo(Destinations.Chat)
+                            })
+                        DropdownMenuItem(
+                            text = {Text("Ajustes")},
+                            onClick = {
+                                navTo(Destinations.Settings)
+                            })
+                        DropdownMenuItem(
+                            text = {Text("Filosofias")},
+                            onClick = {
+                                navTo(Destinations.Philosophies)
+                            })
                     }
                 })
         }
@@ -124,11 +127,34 @@ fun RootApp() {
             startDestination = Destinations.Chat,
             modifier = Modifier.padding(innerPading)
         ){
-            composable(Destinations.Philosophies) { PhilosophiesScreen()}
-            composable(Destinations.Chat) {HomeScreen(homeViewModel = HomeViewModel())}
+            composable(Destinations.Philosophies) {val items = remember {
+                mutableStateListOf(
+                    com.example.ayudafilosofica.domain.Philosophy("stoicism", "Estoicismo", false),
+                    com.example.ayudafilosofica.domain.Philosophy("epicurean", "Epicureísmo", true),
+                    com.example.ayudafilosofica.domain.Philosophy("aristotle", "Aristóteles", false)
+                )
+            }
+
+                // Debes pasar onToggle: actualiza el item en la lista local
+                val onToggle: (String, Boolean) -> Unit = { id, checked ->
+                    val idx = items.indexOfFirst { it.id == id }
+                    if (idx >= 0) items[idx] = items[idx].copy(isSelected = checked)
+                }
+
+                // Llama a tu pantalla pasando los argumentos POR NOMBRE
+                com.example.ayudafilosofica.feature.auth.ui.components.PhilosophiesScreen(
+                    items = items,
+                    onToggle = onToggle
+                )}
+            composable(Destinations.Chat) {backStackEntry ->
+                val vm: HomeViewModel = hiltViewModel(backStackEntry)
+                HomeScreen(homeViewModel = vm)
+            }
             composable (Destinations.Settings){SettingsScreen()}
         }
 
     }
 
 }
+
+
