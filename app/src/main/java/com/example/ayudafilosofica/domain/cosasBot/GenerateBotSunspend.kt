@@ -1,4 +1,4 @@
-package com.example.ayudafilosofica.domain
+package com.example.ayudafilosofica.domain.cosasBot
 
 import com.example.ayudafilosofica.core.Menssage
 

@@ -1,17 +1,23 @@
 package com.example.ayudafilosofica.feature.auth.presentation
 
-import com.example.ayudafilosofica.domain.Philosophy
-import com.example.ayudafilosofica.domain.PhilosophyRepository
+import com.example.ayudafilosofica.domain.CosasPhylosophy.Philosophy
 
 
 data class PhilosophyState(
-    val listPhilosophy : List<Philosophy>,
-    val selected : Set<String>,
+    val items : List<Philosophy> = emptyList(),
+    val selected : Set<String> = emptySet(),
     val isSaving : Boolean = false,
-    val onSave : Boolean = false ){
+    val warnedAboutThree : Boolean = false )
+
+
+sealed interface PhilosophyEvent{
+    data class Toggle(val id: String) : PhilosophyEvent
+    data object SaveClicked : PhilosophyEvent
+    data object LoadRequested : PhilosophyEvent
+
 }
 
-sealed interface PhilosphyEvent{
-    data class Toggle(val id: String) : PhilosphyEvent
-
+sealed interface PhilosophyEffect {
+    data class ShowSnackbar(val text: String) : PhilosophyEffect
+    data object GoHome : PhilosophyEffect
 }

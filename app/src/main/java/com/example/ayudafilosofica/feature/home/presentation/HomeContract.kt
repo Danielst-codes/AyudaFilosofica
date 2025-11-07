@@ -12,7 +12,7 @@ data class HomeState(
 
 sealed interface HomeEvent {
     data class InputChanged(val text: String) : HomeEvent
-    object SendClicked : HomeEvent
+    data object SendClicked : HomeEvent
 
     //Eventos internos
     data class BotReplyArrived(val message: Menssage) : HomeEvent
@@ -22,6 +22,6 @@ sealed interface HomeEvent {
 
 sealed interface HomeEffect {
     data class ShowSnackBar(val text: String) : HomeEffect
-    object ScrollToBottom : HomeEffect
-    object HideKeyboard : HomeEffect
+    data object ScrollToBottom : HomeEffect
+    data object HideKeyboard : HomeEffect
 }

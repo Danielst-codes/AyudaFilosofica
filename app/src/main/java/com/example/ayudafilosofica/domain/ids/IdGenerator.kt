@@ -1,4 +1,6 @@
-package com.example.ayudafilosofica.domain
+package com.example.ayudafilosofica.domain.ids
+
+import java.util.concurrent.atomic.AtomicLong
 
 interface IdGenerator {
     fun nextId(): Long
@@ -6,7 +8,7 @@ interface IdGenerator {
 
 //Con el object tenemos un solo generado, el que crea el id es el nextID
 object AutoId : IdGenerator {
-    private val counter = java.util.concurrent.atomic.AtomicLong(System.currentTimeMillis())
+    private val counter = AtomicLong(System.currentTimeMillis())
     override fun nextId(): Long = counter.incrementAndGet()
 }
 

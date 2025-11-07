@@ -11,12 +11,9 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
-import com.example.ayudafilosofica.domain.MessageTime
-import com.example.ayudafilosofica.domain.IdGenerator
-import com.example.ayudafilosofica.domain.GenerateBotReplySuspend
+import com.example.ayudafilosofica.domain.ids.MessageTime
+import com.example.ayudafilosofica.domain.ids.IdGenerator
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(

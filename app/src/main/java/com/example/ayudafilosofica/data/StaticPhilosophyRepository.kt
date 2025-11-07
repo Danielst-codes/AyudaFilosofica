@@ -1,18 +1,18 @@
 package com.example.ayudafilosofica.data
 
-import com.example.ayudafilosofica.domain.Philosophy
-import com.example.ayudafilosofica.domain.PhilosophyRepository
+import com.example.ayudafilosofica.domain.CosasPhylosophy.Philosophy
+import com.example.ayudafilosofica.domain.CosasPhylosophy.PhilosophyRepository
 import javax.inject.Inject
 
 class StaticPhilosophyRepository @Inject constructor() : PhilosophyRepository {
     private val items = listOf(
-        Philosophy("stoicism", "Estoicismo", false),
-        Philosophy("existentialism", "Existencialismo", false),
-        Philosophy("aristotelian", "Aristotelismo", false),
-        Philosophy("platonism", "Platonismo", false),
-        Philosophy("nihilism", "Nihilismo", false),
-        Philosophy("utilitarianism", "Utilitarismo", false),
-        Philosophy("kantian", "Kantianismo", false)
+        Philosophy("stoicism", "Estoicismo"),
+        Philosophy("existentialism", "Existencialismo"),
+        Philosophy("aristotelian", "Aristotelismo"),
+        Philosophy("platonism", "Platonismo"),
+        Philosophy("nihilism", "Nihilismo"),
+        Philosophy("utilitarianism", "Utilitarismo"),
+        Philosophy("kantian", "Kantianismo")
 
     )
 

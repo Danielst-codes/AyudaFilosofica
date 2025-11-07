@@ -1,4 +1,4 @@
-package com.example.ayudafilosofica.domain
+package com.example.ayudafilosofica.domain.ids
 
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter

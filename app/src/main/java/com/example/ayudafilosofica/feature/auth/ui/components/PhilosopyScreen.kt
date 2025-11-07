@@ -9,41 +9,55 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.ayudafilosofica.domain.Philosophy
+import com.example.ayudafilosofica.domain.CosasPhylosophy.Philosophy
+
 
 @Composable
 fun PhilosophiesScreen(
     items: List<Philosophy>,
-    onToggle: (id: String, checked: Boolean) -> Unit
+    selected: Set<String>,
+    onToggle: (id: String) -> Unit,
+    onSave: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-    val selectCount = items.count { it.isSelected }
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+    ) {
+        // Aviso simple si hay más de 2 seleccionadas
+        if (selected.size > 2) {
+            WarningBanner(
+                message = "Has seleccionado ${selected.size}. Combinar muchas filosofías puede diluir el consejo."
+            )
+            Spacer(Modifier.height(8.dp))
+        }
 
-    Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
-
-            // Aviso si hay más de 2 seleccionadas
-            if (selectCount > 2) {
-                WarningBanner(
-                    message = "No siempre es mejor más: has seleccionado $selectCount filosofías."
+        LazyColumn(
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth(),
+            contentPadding = PaddingValues(vertical = 8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            items(items, key = { it.id }) { item ->
+                PhilosophyRow(
+                    item = item,
+                    isSelected = item.id in selected,
+                    onToggle = { onToggle(item.id) }
                 )
+                Divider()
             }
+        }
 
-            LazyColumn(
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(
-                    items = items,
-                    key = { it.id }
-                ) { item ->
-                    PhilosophyRow(
-                        item = item,
-                        onToggle = onToggle
-                    )
-                    Divider()
-                }
-            }
+        Button(
+            onClick = onSave,
+            enabled = selected.isNotEmpty(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+        ) {
+            Text("Guardar")
         }
     }
 }
@@ -51,20 +65,20 @@ fun PhilosophiesScreen(
 @Composable
 private fun PhilosophyRow(
     item: Philosophy,
-    onToggle: (String, Boolean) -> Unit
+    isSelected: Boolean,
+    onToggle: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Start
+            .padding(vertical = 6.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Switch(
-            checked = item.isSelected,
-            onCheckedChange = { checked -> onToggle(item.id, checked) }
+            checked = isSelected,
+            onCheckedChange = { onToggle() }
         )
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(Modifier.width(12.dp))
         Text(
             text = item.name,
             style = MaterialTheme.typography.bodyLarge
@@ -77,9 +91,7 @@ private fun WarningBanner(message: String) {
     Surface(
         tonalElevation = 2.dp,
         shape = MaterialTheme.shapes.medium,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+        modifier = Modifier.fillMaxWidth()
     ) {
         Text(
             text = message,
@@ -91,28 +103,22 @@ private fun WarningBanner(message: String) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPhilosophyListScreen() {
-    // Estado local solo para la preview
-    val items = remember {
-        mutableStateListOf(
-            Philosophy("stoicism", "Estoicismo", false),
-            Philosophy("epicurean", "Epicureísmo", true),
-            Philosophy("aristotle", "Aristóteles", false)
-        )
-    }
-
-    // Callback que actualiza la lista localmente
-    val onToggle: (String, Boolean) -> Unit = { id, checked ->
-        val idx = items.indexOfFirst { it.id == id }
-        if (idx >= 0) {
-            items[idx] = items[idx].copy(isSelected = checked)
-        }
-    }
+private fun PreviewPhilosophiesScreen() {
+    val items = listOf(
+        Philosophy("stoicism", "Estoicismo"),
+        Philosophy("existentialism", "Existencialismo"),
+        Philosophy("aristotelian", "Aristotelismo")
+    )
+    var selected by remember { mutableStateOf(setOf("existentialism")) }
 
     MaterialTheme {
         PhilosophiesScreen(
             items = items,
-            onToggle = onToggle
+            selected = selected,
+            onToggle = { id ->
+                selected = if (id in selected) selected - id else selected + id
+            },
+            onSave = { /* preview */ }
         )
     }
 }
