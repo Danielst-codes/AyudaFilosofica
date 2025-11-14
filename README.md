@@ -4,7 +4,7 @@ Un chat para dialogar con distintas corrientes filosóficas y obtener respuestas
 📌 Descripción
 
 AyudaFilosófica es una aplicación Android desarrollada con Jetpack Compose, diseñada para ayudarte a reflexionar sobre tus problemas o inquietudes a través de la mirada de diferentes filosofías.
-El usuario elige dos filosofías y el chatbot adapta su forma de responder según esa combinación, ofreciendo un punto de vista más profundo y personalizado.
+El usuario elige una o dos dos filosofías y el chatbot adapta su forma de responder según esa combinación, ofreciendo un punto de vista más profundo y personalizado.
 
 Es un proyecto creado para mi portafolio, aplicando arquitectura moderna, buenas prácticas y un diseño limpio pero elegante.
 
