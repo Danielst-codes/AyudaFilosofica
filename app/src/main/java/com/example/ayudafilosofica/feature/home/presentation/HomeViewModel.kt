@@ -1,6 +1,9 @@
 
 package com.example.ayudafilosofica.feature.home.presentation
 
+import retrofit2.HttpException
+import java.io.IOException
+import com.example.ayudafilosofica.domain.cosasBot.GenerateBotReplySuspend
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.ayudafilosofica.core.Menssage
@@ -14,12 +17,13 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 import com.example.ayudafilosofica.domain.ids.MessageTime
 import com.example.ayudafilosofica.domain.ids.IdGenerator
+import java.net.SocketTimeoutException
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val idGen : IdGenerator,
     private val clock : MessageTime,
-    //private val bot: GenerateBotReplySuspend
+    private val bot: GenerateBotReplySuspend
 ) : ViewModel(){
     private val _state = MutableStateFlow(HomeState())
     val state: StateFlow<HomeState> = _state.asStateFlow() //Esto es un flujo observable
@@ -45,7 +49,7 @@ class HomeViewModel @Inject constructor(
             is HomeEvent.BotReplyFailed -> {
                 //Faltaria el efecto, pero devemos saber el error del porque no llego
                 _state.update { it.reduce(event) }
-                emitEffect(HomeEffect.ShowSnackBar("La maquina fallo"))
+                emitEffect(HomeEffect.ShowSnackBar(event.reason))
             }
 
             is HomeEvent.SendClicked -> {
@@ -110,25 +114,37 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    private suspend fun sendToBot(prompt: String){
-        try {
-            val replytext = "He recibido: $prompt"
-            val botMsg: Menssage = prepareBotMessage(replytext)
-            onEvent(HomeEvent.BotReplyArrived(botMsg))
-        }catch (t: Throwable){
-            onEvent(HomeEvent.BotReplyFailed("Error"))
+    private suspend fun sendToBot(prompt: String) {
+        val history = state.value.messages
+        val result = bot.generateBotReply(prompt, history)
+        result
+            .onSuccess { botMsg -> onEvent(HomeEvent.BotReplyArrived(botMsg)) }
+            .onFailure { e ->
+                android.util.Log.e("BOT", "Fallo al llamar al bot", e)
+                val msg = mapErrorToText(e)
+                onEvent(HomeEvent.BotReplyFailed(msg.toString()))
+            }
+    }
+
+
+    private fun mapErrorToText(throwable: Throwable): String {
+        return when (throwable) {
+            is HttpException -> {
+                when (throwable.code()) {
+                    400 -> "La petición no es válida. Revisa el mensaje enviado."
+                    401, 403 -> "Problema con la API key. Revisa la configuración."
+                    429 -> "Demasiadas peticiones. Espera unos segundos e inténtalo de nuevo."
+                    500, 502, 503, 504 -> "Los servidores de la IA están ocupados. Inténtalo de nuevo en un momento."
+                    else -> "Error del servidor (HTTP ${throwable.code()})."
+                }
+            }
+            is SocketTimeoutException ->
+                "La respuesta está tardando demasiado. Revisa tu conexión o inténtalo de nuevo."
+            is IOException ->
+                "Problema de conexión. Comprueba tu Internet."
+            else -> throwable.message ?: "Error desconocido."
         }
     }
 
-    private fun mapErrorToText(throwable: Throwable) {
-
-    }
-
-    private fun loadHistory() {
-    }
-
-    private fun persistMessages(messages: List<Menssage>) {
-
-    }
 }
 

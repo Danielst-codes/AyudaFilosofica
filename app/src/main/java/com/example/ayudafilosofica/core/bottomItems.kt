@@ -12,5 +12,5 @@ data class BottomItem(val route: String, val label: String, val icon: ImageVecto
 val bottonsItem = listOf(
     BottomItem(Destinations.Philosophies, "Filosofía", Icons.Default.Edit),
     BottomItem(Destinations.Chat, "chat", Icons.Default.Home),
-    BottomItem(Destinations.Settings,"ajustes", Icons.Default.Settings)
+    //BottomItem(Destinations.Settings,"ajustes", Icons.Default.Settings)
 )

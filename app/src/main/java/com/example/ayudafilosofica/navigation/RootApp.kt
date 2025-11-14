@@ -10,7 +10,6 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.compose.*
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.ayudafilosofica.feature.settings.ui.SettingsScreen
 import com.example.ayudafilosofica.feature.auth.presentation.PhilosophyEvent
 import com.example.ayudafilosofica.feature.auth.presentation.PhilosophyViewModel
 import com.example.ayudafilosofica.feature.auth.presentation.PhilosophyEffect
@@ -37,14 +36,25 @@ fun RootApp() {
 
     fun navTo(route: String) {
         menuAbierto = false
-        val yaEstamos = currentDestination?.hierarchy?.any { it.route == route } == true
+
+        val yaEstamos = currentDestination
+            ?.hierarchy
+            ?.any { it.route == route } == true
+
+        // Si ya estoy en esa ruta, no hago nada
         if (yaEstamos) return
+
+        // Si NO estoy, navego
         navController.navigate(route) {
-            popUpTo(navController.graph.startDestinationId) { saveState = true }
+            popUpTo(navController.graph.startDestinationId) {
+                saveState = true
+            }
             launchSingleTop = true
             restoreState = true
         }
     }
+
+
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -72,7 +82,7 @@ fun RootApp() {
     ) { innerPadding ->
         NavHost(
             navController = navController,
-            startDestination = Destinations.Chat,
+            startDestination = Destinations.Philosophies,
             modifier = Modifier.padding(innerPadding)
         ) {
 

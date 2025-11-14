@@ -17,7 +17,7 @@ import javax.inject.Inject
 @HiltViewModel
 class PhilosophyViewModel @Inject constructor(
     private val philosophies: PhilosophyRepository,
-    private val selectedRepo: SelectedPhilosophiesRepository
+    private val selectedRepo: SelectedPhilosophiesRepository,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PhilosophyState())
@@ -39,6 +39,7 @@ class PhilosophyViewModel @Inject constructor(
                 val items = philosophies.getAll()
                 _state.update { it.copy(items = items) }
             }
+
 
             // ✅ Guardar selección
             PhilosophyEvent.SaveClicked -> {
@@ -62,7 +63,6 @@ class PhilosophyViewModel @Inject constructor(
                 }
             }
 
-            // ✅ Seleccionar/deseleccionar filosofía
             is PhilosophyEvent.Toggle -> {
                 val s = state.value
                 val id = event.id

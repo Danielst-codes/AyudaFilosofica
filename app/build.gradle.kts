@@ -1,17 +1,22 @@
+
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-
     alias(libs.plugins.android.ksp)
     alias(libs.plugins.android.hilt)
-
-
 }
 
 android {
     namespace = "com.example.ayudafilosofica"
     compileSdk = 35
+
+    buildFeatures{
+        buildConfig = true
+        compose = true
+    }
 
     defaultConfig {
         applicationId = "com.example.ayudafilosofica"
@@ -19,8 +24,16 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        val props = Properties()
+        val localPropsFile = rootProject.file("local.properties")
+        if (localPropsFile.exists()) {
+            localPropsFile.inputStream().use { props.load(it) }
+        }
+        val apiKey = props.getProperty("GEMINI_API_KEY") ?: ""
+
+        buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -32,32 +45,38 @@ android {
             )
         }
     }
+
+    // Recomendado con AGP 8.x
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-    buildFeatures {
-        compose = true
-    }
+    kotlinOptions { jvmTarget = "17" }
+
+    buildFeatures { compose = true }
 }
 
 dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.navegation.compose)
+
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.hilt.android)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
-
     implementation(libs.androidx.material3)
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0") // 👈 nombre correcto
+
+    // Google Gemini SDK (si lo usas)
+    implementation("com.google.ai.client.generativeai:generativeai:0.2.0")
+
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.11.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+    implementation("com.squareup.retrofit2:converter-scalars:2.11.0")
 
     implementation(project(":shared"))
 
