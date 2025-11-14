@@ -1,7 +1,7 @@
 
 package com.example.ayudafilosofica.feature.home.presentation
 
-import com.example.ayudafilosofica.core.Menssage
+import com.example.ayudafilosofica.core.model.Menssage
 
 data class HomeState(
     val messages: List<Menssage> = emptyList(),

@@ -31,9 +31,10 @@ android {
         if (localPropsFile.exists()) {
             localPropsFile.inputStream().use { props.load(it) }
         }
-        val apiKey = props.getProperty("GEMINI_API_KEY") ?: ""
 
-        buildConfigField("String", "GEMINI_API_KEY", "\"$apiKey\"")
+        val openAiKey = props.getProperty("OPENAI_API_KEY") ?: ""
+        buildConfigField("String", "OPENAI_API_KEY", "\"$openAiKey\"")
+
     }
 
     buildTypes {
@@ -53,7 +54,6 @@ android {
     }
     kotlinOptions { jvmTarget = "17" }
 
-    buildFeatures { compose = true }
 }
 
 dependencies {
@@ -67,10 +67,11 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0") // 👈 nombre correcto
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
-    // Google Gemini SDK (si lo usas)
-    implementation("com.google.ai.client.generativeai:generativeai:0.2.0")
+    //Para el logo
+    implementation("androidx.core:core-splashscreen:1.0.1")
+
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.11.0")

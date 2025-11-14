@@ -1,6 +1,6 @@
 package com.example.ayudafilosofica.feature.auth.presentation
 
-import com.example.ayudafilosofica.domain.CosasPhylosophy.Philosophy
+import com.example.ayudafilosofica.domain.phylosophy.model.Philosophy
 
 
 data class PhilosophyState(

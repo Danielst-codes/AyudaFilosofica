@@ -3,10 +3,10 @@ package com.example.ayudafilosofica.feature.home.presentation
 
 import retrofit2.HttpException
 import java.io.IOException
-import com.example.ayudafilosofica.domain.cosasBot.GenerateBotReplySuspend
+import com.example.ayudafilosofica.domain.chat.usecase.GenerateBotReplySuspend
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ayudafilosofica.core.Menssage
+import com.example.ayudafilosofica.core.model.Menssage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,8 +15,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import com.example.ayudafilosofica.domain.ids.MessageTime
-import com.example.ayudafilosofica.domain.ids.IdGenerator
+import com.example.ayudafilosofica.domain.util.MessageTime
+import com.example.ayudafilosofica.domain.util.IdGenerator
 import java.net.SocketTimeoutException
 
 @HiltViewModel

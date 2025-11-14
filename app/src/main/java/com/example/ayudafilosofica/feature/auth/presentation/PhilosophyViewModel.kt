@@ -2,8 +2,8 @@ package com.example.ayudafilosofica.feature.auth.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.ayudafilosofica.domain.CosasPhylosophy.PhilosophyRepository
-import com.example.ayudafilosofica.domain.CosasPhylosophy.SelectedPhilosophiesRepository
+import com.example.ayudafilosofica.domain.phylosophy.repository.PhilosophyRepository
+import com.example.ayudafilosofica.domain.phylosophy.repository.SelectedPhilosophiesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
