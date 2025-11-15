@@ -1,4 +1,5 @@
 🧠 AyudaFilosófica
+
 Un chat para dialogar con distintas corrientes filosóficas y obtener respuestas profundas a tus dudas personales.
 
 📌 Descripción
