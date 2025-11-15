@@ -52,6 +52,16 @@ Retrofit	Cliente HTTP
 API de OpenAI	Generación de respuestas del chatbot
 Architecture MVS + UDF	Manejo predecible del estado
 
+🧪 Tests
+
+La aplicación incluye tests unitarios para:
+
+ViewModel
+Gestión del estado (Reducer + Contract)
+
+Lógica independiente de UI
+Esto garantiza que la lógica del chat y la selección de filosofías sea predecible y mantenible.
+
 
 🖼️ Capturas de pantalla
 
