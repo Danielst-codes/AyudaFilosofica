@@ -13,7 +13,7 @@
         </DropdownSelection>
         <DialogSelection />
       </SelectionState>
-      <SelectionState runConfigName="PreviewPhilosophyListScreen">
+      <SelectionState runConfigName="inputChanged_updatesInputText_andCanSend_whenNotSending()">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
     </selectionStates>

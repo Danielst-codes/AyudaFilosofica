@@ -69,6 +69,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+
+
     //Para el logo
     implementation("androidx.core:core-splashscreen:1.0.1")
 
@@ -88,4 +91,5 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+    testImplementation(kotlin("test"))
 }

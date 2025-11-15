@@ -16,7 +16,7 @@ class RetrofitModule {
 
     private val okHttp = OkHttpClient.Builder()
         .addInterceptor(logging)
-        // ⬇️ Interceptor que añade la API key de OpenAI
+        //  Interceptor que añade la API key de OpenAI
         .addInterceptor { chain ->
             val original = chain.request()
             val request = original.newBuilder()
@@ -32,8 +32,8 @@ class RetrofitModule {
         .build()
 
     private val retrofit = Retrofit.Builder()
-        .baseUrl("https://api.openai.com/")   // 👈 OpenAI, no Gemini
-        .client(okHttp)                       // 👈 usar el cliente con el interceptor
+        .baseUrl("https://api.openai.com/")
+        .client(okHttp)
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 

@@ -19,6 +19,3 @@ object DomainProviders {
     @Provides
     fun provideMenssageTime() : MessageTime = TimeGenerator
 }
-
-    //@Provides
-    //fun provideGenerateBotReply(): GenerateBotReplySuspend = GenerateBotReplyFake
