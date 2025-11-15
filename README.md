@@ -25,6 +25,7 @@ Es un proyecto creado para mi portafolio, aplicando arquitectura moderna, buenas
 
 📱 Diseño casual, limpio y suave para una experiencia agradable.
 
+
 🏛️ Arquitectura
 
 La app utiliza una arquitectura moderna basada en:
@@ -54,6 +55,7 @@ Retrofit	Cliente HTTP
 API de OpenAI	Generación de respuestas del chatbot
 Architecture MVS + UDF	Manejo predecible del estado
 
+
 🧪 Tests
 
 La aplicación incluye tests unitarios para:
@@ -74,6 +76,7 @@ Pantalla de selección de filosofías(Tema claro / Tema oscuro ):
 Pantalla del chat(Tema claro / Tema oscuro ):
 ![Chat](https://github.com/user-attachments/assets/5be25348-75c6-4e43-92b9-9eec42ddb4f9)
 ![Chat](https://github.com/user-attachments/assets/d2198d28-2eb2-4b1c-8499-78db1d3920f4)
+
 
 
 
