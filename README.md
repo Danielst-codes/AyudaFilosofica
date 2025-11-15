@@ -44,6 +44,7 @@ UI declarativa con Jetpack Compose
 Esta arquitectura permite un código más claro, mantenible y escalable, ideal para futuras ampliaciones del proyecto.
 
 🛠️ Tecnologías utilizadas
+
 Kotlin	Lenguaje principal
 Jetpack Compose	Interfaz moderna y declarativa
 Material 3	Estilos y componentes
